@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ArticleMapper">
+
+    <update id="setArticleCoverUrl">
+        UPDATE articles SET cover_url = #{url} WHERE id = #{id}
+    </update>
+    <select id="getArticle" resultType="Article">
+        SELECT * FROM articles WHERE id = #{id}
+    </select>
+    <select id="searchArticle" resultType="Article">
+        SELECT * FROM articles
+        WHERE
+        title LIKE concat(concat('%',#{str}),'%')
+        OR content like concat(concat('%',#{str}),'%')
+    </select>
+    <select id="getRcmdArticle" resultType="Article">
+        SELECT * FROM articles
+        LEFT JOIN users ON owner_id = users.id
+        WHERE articles.id = 387 OR articles.id = 389
+    </select>
+    <select id="getCarousel" resultType="Article">
+        SELECT * FROM articles ORDER BY hit_cnt LIMIT 0, #{cnt}
+    </select>
+    <select id="getAllArticleContents" resultType="java.lang.String">
+        SELECT content FROM articles;
+    </select>
+</mapper>

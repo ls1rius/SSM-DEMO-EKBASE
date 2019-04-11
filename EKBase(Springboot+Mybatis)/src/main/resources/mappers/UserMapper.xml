@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lh.ekbase.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username" />
+        <result column="name" property="name" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <result column="type" property="type" />
+    </resultMap>
+    <select id="checkUserInfo" resultType="User">
+        SELECT * FROM users WHERE username = #{username} AND password = #{password}
+    </select>
+    <select id="checkUserName" resultType="User">
+        SELECT * FROM users WHERE username = #{username}
+    </select>
+    <select id="getUserInfo" resultType="User">
+        SELECT id, username, `name`, email, type FROM users WHERE id = #{userId}
+    </select>
+    <select id="getFavoriteTags" resultType="Tag">
+        SELECT tags.id, tags.name
+        FROM user_favorite_tags
+        LEFT JOIN tags ON user_favorite_tags.tag_id = tags.id
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getFollowings" resultType="User">
+        SELECT users.*
+        FROM user_followings
+        LEFT JOIN users ON user_followings.following_user_id = users.id
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getFollowers" resultType="User">
+        SELECT users.*
+        FROM user_followings
+            LEFT JOIN users ON user_followings.user_id = users.id
+        WHERE following_user_id = #{userId}
+    </select>
+    <insert id="register">
+        insert into users (username,password,`name`,email,phone)
+        values (#{username},#{password},#{name},#{email},#{phone})
+    </insert>
+</mapper>
